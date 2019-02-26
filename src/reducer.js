@@ -1,17 +1,21 @@
 const toggleTodo = (state, action) => {
-  const todo = state.todos.get(action.payload);
+  const todos = new Map(state.todos);
+  const todo = todos.get(action.payload);
   if (todo) {
     todo.complete = !todo.complete;
   }
   return {
-    ...state
+    ...state,
+    todos
   }
 }
 
 const removeTodo = (state, action) => {
-  state.todos.delete(action.payload);
+  const todos = new Map(state.todos);
+  todos.delete(action.payload);
   return {
-    ...state
+    ...state,
+    todos
   };
 }
 
@@ -19,9 +23,11 @@ const addTodo = (state, action) => {
   if (!action.payload.text) {
     return state;
   }
-  state.todos.set(`${action.payload.id}`, action.payload);
+  const todos = new Map(state.todos);
+  todos.set(`${action.payload.id}`, action.payload);
   return {
-    ...state
+    ...state,
+    todos
   };
 }
 
@@ -31,17 +37,19 @@ const setCurrentTodo = (state, action) => ({
 });
 
 const updateTodo = (state, { payload }) => {
-  state.todos.set(`${payload.id}`, payload);
+  const todos = new Map(state.todos);
+  todos.set(`${payload.id}`, payload);
   return {
     ...state,
+    todos,
     currentTodo: null
   }
 }
 
 const clearTodos = state => {
-  state.todos.clear();
   return {
     ...state,
+    todos: new Map(),
     currentTodo: null
   }
 }
